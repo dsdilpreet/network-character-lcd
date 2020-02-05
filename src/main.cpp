@@ -8,9 +8,9 @@
 #include "Display.h"
 
 //SSID of your network 
-const char* ssid = "Kitty";
+const char* ssid = "your-wifi-name";
 //password of your Network 
-const char* pass = "meeoooow";
+const char* pass = "your-wifi-password";
 
 uint8_t lcd_cols = 20; 
 uint8_t lcd_rows = 4;
@@ -63,6 +63,19 @@ void display()
     return;
   }
 
+  // enable / disable scroll
+  if (doc["scroll"] == 0 || doc["scroll"] == 1)
+  {
+    lcd.setScroll(doc["scroll"]);
+  }
+  else
+  {
+    Serial.println("Invalid scroll value");
+    server.send(400, "");
+    return;
+  }
+
+  // print data on each lcd row
   for (uint8_t i = 0; i < lcd_rows; i++)
   {
     const char* text = doc["data"][i]["text"];
@@ -72,45 +85,7 @@ void display()
       Serial.println(text);
     }
   }
-
   
-  doc.clear();
-  server.send(204, "");
-}
-
-// Parse the request and apply config
-void config()
-{
-    Serial.println(server.arg(0));
-
-  // Request does not have any body
-  if (!server.args())
-  {
-    Serial.println("Request does not have a body");
-    server.send(400, "");
-    return;
-  }
-
-  DeserializationError error = deserializeJson(doc, server.arg(0));
-
-  // Return bad request if parsing failed
-  if (error) 
-  {
-    Serial.println("JSON Parsing failed");
-    server.send(400, "");
-    return;
-  }
-
-  if (doc["autoscroll"] == 0 || doc["autoscroll"] == 1)
-  {
-    lcd.setScroll(doc["autoscroll"]);
-  }
-  else
-  {
-    Serial.println("Invalid autoscroll value");
-    server.send(400, "");
-  }
-
   doc.clear();
   server.send(204, "");
 }
@@ -118,6 +93,7 @@ void config()
 // API endpoint for clearing the display
 void clear()
 {
+  Serial.println("clear display request received");
   lcd.clear();
   server.send(204, "");
 }
@@ -131,7 +107,6 @@ void setup()
 {
 
   Serial.begin(9600);
-  Serial.println("Remote Network Display");
 
   lcd.init();                      // initialize the lcd 
   lcd.backlight();
@@ -139,16 +114,13 @@ void setup()
   timer.attach(0.5, scroll);
 
   lcd.printText(0, "Network Char LCD");
-  lcd.printText(1, " ");
-  lcd.printText(2, " ");
-  lcd.printText(3, " ");
+  lcd.printText(1, "v 1.0");
 
   delay(2000);
 
   connectWiFi();
 
   server.on("/display", display);
-  server.on("/config", config);
   server.on("/clear", clear);
   server.begin();
 }
