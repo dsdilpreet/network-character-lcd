@@ -8,6 +8,15 @@ Make your own network connected standalone LCD module with the help of character
 - Wi-Fi Router for network connectivity
 - Visual Studio Code with Platform IO extension
 
+## Hardware Connections
+Connect the pin mentioned in first column with second column for that row with help of jumper wires and breadboard.
+| ESP Developement board  | I2C LCD |
+| ------------- | ------------- |
+| VIN  | VCC  |
+| GND  | GND  |
+| D1  | SCL  |
+| D2  | SDA  |
+
 ## Getting Started
 Open the project in Visual Studio Code using Platform IO home. Enter your WiFi username and password in `main.cpp` file. Build the project and it should download all the required dependencies. Connect the ESP8266 Development board and upload the code to it. The LCD should display the IP address when network is successfully connected.
 
