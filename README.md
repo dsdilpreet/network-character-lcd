@@ -35,6 +35,9 @@ Send an HTTP `POST` request to `http://{ip_address_of_esp}/display` with content
 
 Check out [this blog post](https://dilpreet.dev/blog/network-character-lcd) for more details.
 
+## Logs
+Open serial monitor from bottom Platform IO bar in VS Code to see logs.
+
 ## Dependencies
 - [Arduino JSON](https://github.com/bblanchon/ArduinoJson)
 - [Liquid Crystal I2C](https://github.com/johnrickman/LiquidCrystal_I2C)
