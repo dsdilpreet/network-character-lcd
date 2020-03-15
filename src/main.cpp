@@ -70,9 +70,7 @@ void display()
   }
   else
   {
-    Serial.println("Invalid scroll value");
-    server.send(400, "");
-    return;
+    Serial.println("Invalid or empty scroll value");
   }
 
   // print data on each lcd row
